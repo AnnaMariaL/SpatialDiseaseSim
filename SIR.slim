@@ -9,7 +9,7 @@ initialize() {
 		defineConstant("D", 1e-6); //diffusion coefficient (SD in movement = sqrt(2D))
 		defineConstant("R",15); //number of average contacts per cycle; determines interaction radius
 		defineConstant("ALPHA",0.01); //disease establishment proportion
-		defineConstant("INFTICKS",50); //number if "ticks" an individual remains infectious
+		defineConstant("GAMMA",1/50); //recovery probability per tick 
 		defineConstant("N",10000); //number of individuals 
 		defineConstant("STORE",1); //index for storage 
 	}
@@ -17,7 +17,7 @@ initialize() {
 	defineConstant("SD_MOVE", sqrt(2*D)); //standard deviation movement (derived)
 	defineConstant("DELTA_I", sqrt((1*R)/(N*PI))); //interaction distance between individuals (derived)
 	
-	defineConstant("HEALTH_I",INFTICKS); //tag, infectous individuals (derived)
+	defineConstant("HEALTH_I",1); //tag, infectous individuals
 	
 	defineConstant("HEALTH_S",-1); //tag, susceptible individuals
 	defineConstant("HEALTH_E",-2); //tag, exposed individuals
@@ -97,8 +97,10 @@ early() { //colors
 				if(length(exposed)>0) exposed.tag = HEALTH_E; //change infection status to exposed
 			}
 		}
-		i.tag = i.tag - 1; //reduce number of infectious days 
-		if (i.tag == 0) i.tag = HEALTH_IR;  //queue recovery after INFTICKS infectious ticks
+		recoveryChance = runif(n=1, min=0, max=1); //sample recovery chance 
+		if (recoveryChance <= GAMMA) { //if successful recovery: queue recovery after infection propagation
+			i.tag = HEALTH_IR;
+		}
 	}
 	
 	inds=p1.individuals; //change exposed --> infectious
@@ -127,8 +129,8 @@ early() { //colors
 	if(sim.cycle>=25) { //if infection was seeded
 		
 		if((sum(inds.tag==HEALTH_S)==0) | (sum(inds.tag>0)==0)) { //if disease spread/lost (i.e., no susceptibles/infectious individuals) 
-			out=paste(ID,D,R,N,ALPHA,INFTICKS,DELTA_I,SD_MOVE,(sim.cycle-25),sep="\t");
-			hout=paste("SEED","D","R","N","ALPHA","INFTICKS","DELTA_I","SD_MOVE","TOBS",sep="\t");
+			out=paste(ID,D,R,N,ALPHA,GAMMA,DELTA_I,SD_MOVE,(sim.cycle-25),sep="\t");
+			hout=paste("SEED","D","R","N","ALPHA","GAMMA","DELTA_I","SD_MOVE","TOBS",sep="\t");
 			
 			
 			if(exists("slimgui")){
