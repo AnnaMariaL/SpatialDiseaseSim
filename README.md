@@ -18,7 +18,7 @@ R=averave number of contacts per tick
 
 ALPHA=disease establishment proportion
 
-INFTICKS=number of infectious ticks (SIS.slim, SIR.slim)
+GAMMA=recovery probability per tick (SIS.slim, SIR.slim)
 
 N=population size
 
