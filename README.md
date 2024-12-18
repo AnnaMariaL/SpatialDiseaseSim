@@ -1,4 +1,4 @@
-# SpatialDieaseSim
+# SpatialDiseaseSim
 Repository accompanying the manuscript "Catching a wave: on the suitability of traveling-wave solutions in epidemiological modeling" (DOI: https://doi.org/10.1101/2023.06.23.546298; or  SID_TPB_v1.pdf in this repository). 
 
 Three classic compartmental disease transmission models implemented in SLiM4 (https://messerlab.org/slim/)
